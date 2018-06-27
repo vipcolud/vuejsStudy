@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>组件</title>
+    <link rel="stylesheet" href="">
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<body>
+<hr>
+<div id="components-demo">
+  <button-counter></button-counter>
+  <button-counter></button-counter>
+  <button-counter></button-counter>
+</div>
+<hr>
+<div id="blog-post-demo">
+<blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title"></blog-post>
+</div>
+<hr>
+<div id="blog-post-post">
+<div :style="{ fontSize: postFontSize + 'em' }">
+<blog-post  v-on:enlarge-text="postFontSize += $event" v-for="post in posts" v-bind:key="post.id" v-bind:post="post"></blog-post>
+</div>
+</div>
+<hr>
+<div id='custom-input'>
+<alert-box>
+  Something bad happened.
+</alert-box>
+</div>
+
+<script>
+// 定义一个名为 button-counter 的新组件
+Vue.component('button-counter', {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+})
+new Vue({ el: '#components-demo' })
+//props
+Vue.component('blog-post', {
+  props: ['title'],
+  template: '<h3>{{ title }}</h3>'
+})
+new Vue({
+  el: '#blog-post-demo',
+  data: {
+    posts: [
+      { id: 1, title: 'My journey with Vue' },
+      { id: 2, title: 'Blogging with Vue' },
+      { id: 3, title: 'Why Vue is so fun' }
+    ]
+  }
+})
+//属性封装为post
+Vue.component('blog-post', {
+  props: ['post'],
+  template: `
+    <div class="blog-post">
+      <h3>{{ post.title }}</h3>
+      <button v-on:click="$emit('enlarge-text', 0.1)">
+        Enlarge text
+      </button>
+      <div v-html="post.content"></div>
+    </div>
+  `
+})
+
+new Vue({
+  el: '#blog-post-post',
+  data: {
+    posts: [
+      { id: 1, title: 'My journey with Vue',content:'学习vue' },
+      { id: 2, title: 'Blogging with Vue',content:'学习vue' },
+      { id: 3, title: 'Why Vue is so fun',content:'学习vue' }
+    ],
+     postFontSize:1.0  //传递样式属性
+  }
+})
+
+Vue.component('alert-box', {
+  template: `
+    <div class="demo-alert-box">
+      <strong>Error!</strong>
+      <slot></slot>
+    </div>
+  `
+})
+
+new Vue({
+  el: '#custom-input'
+})
+
+</script>
+
+</body>
+</html>
