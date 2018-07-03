@@ -1,0 +1,13 @@
+<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<head>
+
+    <script type="text/javascript">
+        function OnInput (event) {
+            $("#a").html(event.srcElement.value);
+        }
+    </script>
+</head>
+<body>
+    <input type="text" oninput="OnInput (event)" value="hello" />
+    <a id="a"></a>
+</body>
